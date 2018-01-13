@@ -36,14 +36,13 @@
         let Entries (db: Day) = 
             db
             |> Map.toSeq
-            |> Seq.map (fun (_, v) ->
+            |> Seq.collect (fun (_, v) ->
                 v
                 |> Map.toSeq
                 |> Seq.map (fun (k, _) ->
                     k
                 )
             )
-            |> Seq.concat
             |> Seq.distinct
             |> Seq.toList
 
