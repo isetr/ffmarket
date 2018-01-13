@@ -6,6 +6,9 @@
 
         type DB = CsvProvider<"Content/sampledb.csv">
 
+        let Load (path: string) =
+            DB.Load path
+
         let PrintDB (path: string) =
             use db = DB.Load path
             db.Rows

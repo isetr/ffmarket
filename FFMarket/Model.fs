@@ -16,7 +16,7 @@
         type Day = Map<System.DateTime, Map<string, Entry list>>
 
         let FromDB (path: string) =
-            use db = DB.Load path
+            use db = Database.Load path
             db.Rows
             |> Seq.fold (fun (s: Day) v -> 
                 let entry = {Name = v.Name; HQ = v.HQ; Price = v.Price; Quantity = v.Quantity; Date = v.Date}
@@ -32,6 +32,20 @@
                     let m = Map<string, Entry list> [|(v.Name, [entry])|]
                     s.Add (v.Date, m)
             ) Map.empty
+
+        let Entries (db: Day) = 
+            db
+            |> Map.toSeq
+            |> Seq.map (fun (_, v) ->
+                v
+                |> Map.toSeq
+                |> Seq.map (fun (k, _) ->
+                    k
+                )
+            )
+            |> Seq.concat
+            |> Seq.distinct
+            |> Seq.toList
 
         let SelectEntry (entry: string) (selector: Entry list -> float) (db: Day) =
             db
