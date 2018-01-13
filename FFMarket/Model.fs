@@ -26,7 +26,7 @@
                         match m.TryFind v.Name with
                         | Some el   -> entry :: el
                         | None      -> [entry]
-                    let m = Map<string, Entry list> [|(v.Name, el)|]
+                    let m = m.Add(v.Name, el)
                     s.Add (v.Date, m)
                 | None -> 
                     let m = Map<string, Entry list> [|(v.Name, [entry])|]
@@ -39,6 +39,9 @@
                 match v.TryFind entry with
                 | Some el -> selector el
                 | None -> 0.
+            )
+            |> Map.filter (fun _ v ->
+                v > 0.
             )
 
         let AveragePrice (entryList: Entry list) =
